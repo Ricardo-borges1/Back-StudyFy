@@ -443,8 +443,66 @@ JOIN
     tbl_salas ON tbl_salas_alunos.sala_id = tbl_salas.id           -- Junta com a tabela de salas
 WHERE 
     tbl_salas.id = 1;  -- Substitua 1 pelo ID da sala desejada para filtrar os alunos dessa sala
+    
+    
+    
+/*mostra todos os emblemas que um aluno tem, com base no nivel atual*/
+
+SELECT 
+    emblema.id AS emblema_id,
+    emblema.nome AS emblema_nome,
+    nivel_atual.nivel AS nivel_atual,
+    nivel_atual.meta AS meta_atual,
+    proximo_nivel.nivel AS proximo_nivel,
+    proximo_nivel.meta AS meta_proxima
+FROM 
+    tbl_emblema AS emblema
+JOIN 
+    tbl_nivel_emblema AS nivel_atual ON emblema.id = nivel_atual.id_emblema
+LEFT JOIN 
+    tbl_nivel_emblema AS proximo_nivel ON emblema.id = proximo_nivel.id_emblema AND proximo_nivel.nivel = nivel_atual.nivel + 1
+WHERE 
+    nivel_atual.id IN (
+        SELECT id_nivel_emblema 
+        FROM tbl_aluno_emblema 
+        WHERE id_aluno = 1  -- Substitua 1 pelo ID do aluno
+    )
+AND 
+    nivel_atual.nivel = (
+        SELECT MAX(nivel) 
+        FROM tbl_nivel_emblema 
+        WHERE id_emblema = emblema.id AND 
+              id IN (
+                  SELECT id_nivel_emblema 
+                  FROM tbl_aluno_emblema 
+                  WHERE id_aluno = 1  -- Substitua 1 pelo ID do aluno
+              )
+    );
 
 
+
+    
+
+
+/*mostra os emblemas que o aluno ainda não tem*/
+
+SELECT 
+    n.id AS nivel_emblema_id,
+    n.nivel,
+    e.id AS emblema_id,
+    e.nome AS emblema_nome,
+    n.meta
+FROM 
+    tbl_nivel_emblema n
+JOIN 
+    tbl_emblema e ON n.id_emblema = e.id
+WHERE 
+    n.nivel = 1 
+    AND n.id NOT IN (
+        SELECT id_nivel_emblema 
+        FROM tbl_aluno_emblema 
+        WHERE id_aluno = 1  -- Substitua ? pelo ID do aluno
+    );
 
 
 -- Seleciona alunos e seus pontos de ranking em uma sala específica

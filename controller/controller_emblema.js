@@ -122,6 +122,58 @@ const setExcluirEmblema = async function (id) {
 };
 
 
+// Função para listar os emblemas conquistados por um aluno
+const getListarEmblemasAluno = async function (idAluno) {
+    try {
+        // Criar o objeto JSON
+        let emblemasJSON = {};
+
+        // Chamar a função do DAO para retornar os dados dos emblemas do aluno
+        let dadosEmblemas = await emblemaDAO.selectEmblemasAluno(idAluno);
+
+        // Validação para verificar se existem dados 
+        if (dadosEmblemas) {
+            // Criar o JSON para devolver para o APP
+            emblemasJSON.emblemas = dadosEmblemas;
+            emblemasJSON.quantidade = dadosEmblemas.length;
+            emblemasJSON.status_code = 200;
+            return emblemasJSON;
+        } else {
+            return message.ERROR_NOT_FOUND;
+        }
+    } catch (error) {
+        console.log(error);
+        return message.ERROR_INTERNAL_SERVER;
+    }
+}
+
+// Função para listar os emblemas não conquistados por um aluno
+const getListarEmblemasNaoConquistados = async function (idAluno) {
+    try {
+        // Criar o objeto JSON
+        let emblemasNaoConquistadosJSON = {};
+
+        // Chamar a função do DAO para retornar os dados dos emblemas não conquistados
+        let dadosEmblemasNaoConquistados = await emblemaDAO.selectEmblemasNaoConquistados(idAluno);
+
+        // Validação para verificar se existem dados 
+        if (dadosEmblemasNaoConquistados) {
+            // Criar o JSON para devolver para o APP
+            emblemasNaoConquistadosJSON.emblemasNaoConquistados = dadosEmblemasNaoConquistados;
+            emblemasNaoConquistadosJSON.quantidade = dadosEmblemasNaoConquistados.length;
+            emblemasNaoConquistadosJSON.status_code = 200;
+            return emblemasNaoConquistadosJSON;
+        } else {
+            return message.ERROR_NOT_FOUND;
+        }
+    } catch (error) {
+        console.log(error);
+        return message.ERROR_INTERNAL_SERVER;
+    }
+}
+
+
+
 
 module.exports = {
     getEmblema,
@@ -129,4 +181,6 @@ module.exports = {
     setInserirNovoEmblema,
     setAtualizarEmblema,
     setExcluirEmblema,
+    getListarEmblemasAluno,
+    getListarEmblemasNaoConquistados
 };

@@ -1251,6 +1251,20 @@ app.delete('/v1/studyfy/emblema/:id', async (req, res) => {
 });
 
 
+// Endpoint: Listar os emblemas conquistados por um aluno
+app.get('/v1/studyfy/emblema/conquistados/:idAluno', async (req, res) => {
+    const idAluno = req.params.idAluno;
+    let resultado = await controllerEmblema.getListarEmblemasAluno(idAluno);
+    res.status(resultado.status_code).json(resultado);
+});
+
+// Endpoint: Listar os emblemas não conquistados por um aluno
+app.get('/v1/studyfy/emblema/nao-conquistados/:idAluno', async (req, res) => {
+    const idAluno = req.params.idAluno;
+    let resultado = await controllerEmblema.getListarEmblemasNaoConquistados(idAluno);
+    res.status(resultado.status_code).json(resultado);
+});
+
 
 
 
