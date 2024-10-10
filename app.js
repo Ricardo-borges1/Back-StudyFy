@@ -685,6 +685,31 @@ app.post('/v1/studyFy/login-email', cors(), bodyParserJSON, async function(reque
     response.json(resultadoLogin);
 });
 
+
+
+// Endpoint: Recupera a senha do usuário pelo ID
+app.post('/v1/studyFy/get-senha', cors(), bodyParserJSON, async function(request, response) {
+    // Recebe o content-type da requisição
+    let contentType = request.headers['content-type'];
+
+    // Recebe todos os dados encaminhados na requisição pelo Body
+    let dadosBody = request.body;
+
+    // Verifica se o ID foi enviado
+    if (!dadosBody.id) {
+        return response.status(400).json({ status_code: 400, message: 'ID do aluno é necessário.' });
+    }
+
+    // Encaminha os dados para a controller recuperar a senha
+    let resultadoSenha = await controllerAluno.getSenhaDoUsuario(dadosBody.id);
+
+    response.status(resultadoSenha.status_code);
+    response.json(resultadoSenha);
+});
+
+
+
+
 //       --------------------   CRUD RESPOSTAS DÚVIDA  ---------------------        //
 
 // -> EndPoint: Retorna todos os dados de respostas do Banco de Dados

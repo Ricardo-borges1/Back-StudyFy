@@ -437,6 +437,27 @@ const verificaDominioExiste = async (email) => {
     }
 };
 
+const getSenhaDoUsuario = async function(id) {
+    try {
+        let senhaJSON = {};
+        let dadosUsuario = await alunoDAO.selectSenhaById(id);
+
+        if (!dadosUsuario || dadosUsuario.length === 0) {
+            return { status_code: 404, message: 'Aluno não encontrado' };
+        }
+
+        console.log(dadosUsuario);
+        
+        // Se tudo estiver correto, retorna a senha do usuário
+        senhaJSON.senha = dadosUsuario[0].senha;
+        senhaJSON.status_code = 200;
+        senhaJSON.message = 'Senha recuperada com sucesso';
+        return senhaJSON;
+    } catch (error) {
+        console.log(error);
+        return { status_code: 500, message: 'Erro interno do servidor' };
+    }
+};
 
 
 
@@ -453,5 +474,6 @@ module.exports = {
     loginUsuario,
     getListarAlunosPorSala,
     setAtualizarSenhaAluno,
-    loginUsuarioEmail
+    loginUsuarioEmail,
+    getSenhaDoUsuario
 };

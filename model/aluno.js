@@ -383,6 +383,18 @@ const updateSenhaAluno = async function(id, novaSenha) {
 };
 
 
+const selectSenhaById = async function(id) {
+    try {
+        let sql = `SELECT senha FROM tbl_alunos WHERE id = ${id};`;
+        let rsAluno = await prisma.$queryRawUnsafe(sql);
+        
+        return rsAluno;
+    } catch (error) {
+        console.log(error);
+        return false;
+    }
+};
+
 
 
 module.exports ={
@@ -396,7 +408,8 @@ module.exports ={
     selectUsuarioByEmailESenha,
     selectAlunosRank,
     updateSenhaAluno,
-    selectUsuarioByEmail
+    selectUsuarioByEmail,
+    selectSenhaById
 
 }
 
