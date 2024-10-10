@@ -71,6 +71,18 @@ const bodyParserJSON = bodyParser.json()
         response.json(dadosAlunos)
     })
 
+
+    app.put('/v1/studyFy/aluno-senha/:id', cors(), bodyParserJSON, async function(request, response){
+        let contentType = request.headers['content-type']
+        let dadosBody = request.body
+        let idAluno = request.params.id
+
+        let dadosAluno = await controllerAluno.setAtualizarSenhaAluno(idAluno, dadosBody, contentType)
+
+      response.status(dadosAluno.status_code)
+      response.json(dadosAluno)
+    })
+    
    
 
     // // EndPoint: ele retorna os dados pelo id

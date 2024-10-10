@@ -370,6 +370,26 @@ const getListarAlunosPorSala = async function(salaId) {
 };
 
 
+const setAtualizarSenhaAluno = async function(id, dados, contentType) {
+    try {
+        if (String(contentType).toLowerCase() === 'application/json') {
+            const novaSenha = dados.novaSenha; // Certifique-se de que você está acessando a senha corretamente
+            let updatedSenha = await alunoDAO.updateSenhaAluno(id, novaSenha);
+            if (updatedSenha) {
+                return { message: "Senha atualizada com sucesso!", status: message.SUCCESS_UPDATED_ITEM.status, status_code: message.SUCCESS_UPDATED_ITEM.status_code };
+            } else {
+                return message.ERROR_INTERNAL_SERVER_DB;
+            }
+        } else {
+            return message.ERROR_CONTENT_TYPE;
+        }
+    } catch (error) {
+        console.log(error);
+        return message.ERROR_INTERNAL_SERVER;
+    }
+};
+
+
 
 
 
@@ -383,5 +403,6 @@ module.exports = {
     getListarAlunosMentores,
     converterData,
     loginUsuario,
-    getListarAlunosPorSala
+    getListarAlunosPorSala,
+    setAtualizarSenhaAluno
 };

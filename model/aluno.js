@@ -356,6 +356,22 @@ const selectAlunosRank = async function(salaId) {
 }
 
 
+// Função para atualizar a senha do aluno
+const updateSenhaAluno = async function(id, novaSenha) {
+    try {
+        let sql = `UPDATE tbl_alunos 
+                   SET senha = '${novaSenha}' 
+                   WHERE id = ${id};`;
+        let resultado = await prisma.$executeRawUnsafe(sql);
+        return resultado;
+    } catch (error) {
+        console.log(error);
+        return false;
+    }
+};
+
+
+
 
 module.exports ={
     adicionarAlunoASala,
@@ -366,7 +382,8 @@ module.exports ={
     insertAluno,
     updateAluno,
     selectUsuarioByEmailESenha,
-    selectAlunosRank
+    selectAlunosRank,
+    updateSenhaAluno
 
 }
 
