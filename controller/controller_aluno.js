@@ -288,7 +288,11 @@ const setAtualizarAluno = async function(id, dadosAluno, contentType) {
     try {
         let idAluno = id;
 
-        // Validação do ID
+        const dominioValido = await verificaDominioExiste(dadosAluno.email)
+        if(dominioValido == false){
+            return message.ERROR_EMAIL_VALIDATE
+        } else {
+                    // Validação do ID
         if (idAluno === '' || idAluno === undefined || isNaN(idAluno) || idAluno === null) {
             return message.ERROR_INVALID_ID;
         } else {
@@ -336,6 +340,7 @@ const setAtualizarAluno = async function(id, dadosAluno, contentType) {
             } else {
                 return message.ERROR_CONTENT_TYPE; // 415
             }
+        }
         }
     } catch (error) {
         console.log('Erro ao atualizar aluno:', error);
