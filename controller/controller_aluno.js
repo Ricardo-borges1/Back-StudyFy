@@ -167,6 +167,29 @@ const loginUsuario = async function(email, senha) {
     }
 };
 
+const loginUsuarioEmail = async function(email,id_aluno) {
+    try {
+        let usuarioJSON = {};
+        let dadosUsuario = await alunoDAO.selectUsuarioByEmail(email, id_aluno);
+
+        if (dadosUsuario.length === 0) {
+            return { status_code: 400, message: 'Usuário não encontrado ou senha incorreta' };
+        }
+
+        console.log(dadosUsuario);
+        
+        // Se tudo estiver correto, retorna o usuário e uma mensagem de sucesso
+        usuarioJSON.usuario_id = dadosUsuario[0].id;
+        usuarioJSON.status_code = 200;
+        usuarioJSON.message = 'Login bem-sucedido';
+        return usuarioJSON;
+    } catch (error) {
+        console.log(error);
+        return { status_code: 500, message: 'Erro interno do servidor' };
+    }
+};
+
+
 
 
 // Função para buscar aluno por ID
@@ -429,5 +452,6 @@ module.exports = {
     converterData,
     loginUsuario,
     getListarAlunosPorSala,
-    setAtualizarSenhaAluno
+    setAtualizarSenhaAluno,
+    loginUsuarioEmail
 };

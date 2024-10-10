@@ -61,6 +61,18 @@ const selectUsuarioByEmailESenha = async function(email, senha) {
 };
 
 
+const selectUsuarioByEmail = async function(email) {
+    try {
+        let sql = `SELECT id FROM tbl_alunos WHERE email = '${email}';`;
+        let rsAluno = await prisma.$queryRawUnsafe(sql);
+        return rsAluno;
+    } catch (error) {
+        console.log(error);
+        return false;
+    }
+};
+
+
 
 
 const insertAluno = async function(dadosAluno) {
@@ -383,7 +395,8 @@ module.exports ={
     updateAluno,
     selectUsuarioByEmailESenha,
     selectAlunosRank,
-    updateSenhaAluno
+    updateSenhaAluno,
+    selectUsuarioByEmail
 
 }
 

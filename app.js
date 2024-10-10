@@ -669,6 +669,22 @@ app.post('/v1/studyFy/login', cors(), bodyParserJSON, async function(request, re
     response.json(resultadoLogin);
 });
 
+
+// Endpoint: Realiza o login do usuário
+app.post('/v1/studyFy/login-email', cors(), bodyParserJSON, async function(request, response) {
+    // Recebe o content-type da requisição
+    let contentType = request.headers['content-type'];
+
+    // Recebe todos os dados encaminhados na requisição pelo Body
+    let dadosBody = request.body;
+
+    // Encaminha os dados para a controller realizar o login
+    let resultadoLogin = await controllerAluno.loginUsuarioEmail(dadosBody.email);
+
+    response.status(resultadoLogin.status_code);
+    response.json(resultadoLogin);
+});
+
 //       --------------------   CRUD RESPOSTAS DÚVIDA  ---------------------        //
 
 // -> EndPoint: Retorna todos os dados de respostas do Banco de Dados
