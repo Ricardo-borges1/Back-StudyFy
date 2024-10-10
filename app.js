@@ -109,7 +109,7 @@ const bodyParserJSON = bodyParser.json()
 
         //Encaminha os dados para a controller enviar para o DAO
         let resultDadosNovoAluno = await controllerAluno.setInserirNovoAluno(dadosBody, contentType)
-        
+        console.log(resultDadosNovoAluno);
         response.status(resultDadosNovoAluno.status_code)
         response.json(resultDadosNovoAluno)
     })

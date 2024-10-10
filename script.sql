@@ -351,6 +351,12 @@ INSERT INTO tbl_alunos (nome, email, senha, data_nascimento, telefone, serie, po
 ('Aluno 1', 'aluno1@example.com', 'senha123', '2005-01-01', '123456789', '1ª série', 0, 1),
 ('Aluno 2', 'aluno2@example.com', 'senha456', '2005-02-01', '987654321', '2ª série', 0, 1);
 
+UPDATE tbl_alunos 
+SET senha = 'novaSenha' 
+WHERE id = 1;
+
+select * from tbl_alunos;
+
 -- Inserir dados na tabela tbl_salas_alunos
 INSERT INTO tbl_salas_alunos (aluno_id, sala_id) VALUES
 (1, 1),

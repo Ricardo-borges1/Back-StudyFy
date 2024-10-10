@@ -9,6 +9,7 @@ const message = require('./modulo/config.js');
 const alunoDAO = require('../model/aluno.js');
 const materiaDAO = require('../model/materia.js');
 const mentorDAO = require ('../model/mentor.js')
+const dns = require('dns').promises
 
 
 // Função auxiliar para validar a data de nascimento
@@ -214,37 +215,44 @@ const setInserirNovoAluno = async function(dadosAluno, contentType) {
 
             // Validação de campos (omitida por brevidade)
 
-            let novoAluno = await alunoDAO.insertAluno(dadosAluno);
+            const dominioValido = await verificaDominioExiste(dadosAluno.email)
+
+            if(dominioValido == false){
+                return message.ERROR_EMAIL_VALIDATE
+            } else {
+
+                let novoAluno = await alunoDAO.insertAluno(dadosAluno);
             
-            if (novoAluno) {
-                let lastId = await alunoDAO.lastIDAluno();
-                dadosAluno.id = lastId[0].id;
-
-                console.log('aaaaaaaaaaaaaa');
-
-                console.log(dadosAluno.id);
-                
-                // Chama a função para adicionar o aluno à sala
-                const alunoAdicionadoASala = await alunoDAO.adicionarAlunoASala(dadosAluno.id);
-
-                console.log('cccccccc');
-                
-                
-                if (!alunoAdicionadoASala) {
+                if (novoAluno) {
+                    let lastId = await alunoDAO.lastIDAluno();
+                    dadosAluno.id = lastId[0].id;
+    
+                    console.log('aaaaaaaaaaaaaa');
+    
+                    console.log(dadosAluno.id);
+                    
+                    // Chama a função para adicionar o aluno à sala
+                    const alunoAdicionadoASala = await alunoDAO.adicionarAlunoASala(dadosAluno.id);
+    
+                    console.log('cccccccc');
+                    
+                    
+                    if (!alunoAdicionadoASala) {
+                        return message.ERROR_INTERNAL_SERVER_DB; // 500
+                    }
+    
+                    console.log('bbbbbbbbbb');
+                    
+    
+                    alunoJSON.aluno = dadosAluno;
+                    alunoJSON.status = message.SUCCESS_CREATED_ITEM.status;
+                    alunoJSON.status_code = message.SUCCESS_CREATED_ITEM.status_code;
+                    alunoJSON.message = message.SUCCESS_CREATED_ITEM.message;
+    
+                    return alunoJSON; // 201
+                } else {
                     return message.ERROR_INTERNAL_SERVER_DB; // 500
                 }
-
-                console.log('bbbbbbbbbb');
-                
-
-                alunoJSON.aluno = dadosAluno;
-                alunoJSON.status = message.SUCCESS_CREATED_ITEM.status;
-                alunoJSON.status_code = message.SUCCESS_CREATED_ITEM.status_code;
-                alunoJSON.message = message.SUCCESS_CREATED_ITEM.message;
-
-                return alunoJSON; // 201
-            } else {
-                return message.ERROR_INTERNAL_SERVER_DB; // 500
             }
         } else {
             return message.ERROR_CONTENT_TYPE; // 415
@@ -386,6 +394,18 @@ const setAtualizarSenhaAluno = async function(id, dados, contentType) {
     } catch (error) {
         console.log(error);
         return message.ERROR_INTERNAL_SERVER;
+    }
+};
+
+const verificaDominioExiste = async (email) => {
+    const dominio = email.split('@')[1];
+
+    try {
+        const registrosMx = await dns.resolveMx(dominio);
+        return registrosMx.length > 0; // Retorna true se o domínio existe
+    } catch (error) {
+        console.error(`Erro ao verificar o domínio: ${error.message}`);
+        return false; // O domínio pode não existir
     }
 };
 
