@@ -1049,3 +1049,57 @@ SELECT * FROM tbl_materias WHERE id IN (1, 2);
 
 
 
+   -------------------------------------------------------------------------------------
+
+-- VIEWS 
+
+
+
+-- VIEWS 1 
+SELECT 
+   tbl_alunos.id AS id_aluno,                               -- ID do aluno
+   tbl_alunos.nome AS nome_aluno,                           -- Nome do aluno
+   tbl_alunos_ranks.pontos_rank AS pontos_aluno,          -- Pontos do aluno no ranking
+   ROW_NUMBER() OVER (ORDER BY tbl_alunos_ranks.pontos_rank DESC) AS posicao  -- Calcula a posição no ranking
+FROM 
+   tbl_alunos 
+JOIN 
+   tbl_salas_alunos ON tbl_alunos.id = tbl_salas_alunos.aluno_id  -- Junta alunos com salas que frequentam
+JOIN 
+   tbl_salas ON tbl_salas_alunos.sala_id = tbl_salas.id           -- Junta com a tabela de salas
+LEFT JOIN 
+   tbl_alunos_ranks ON tbl_alunos.id = tbl_alunos_ranks.aluno_id  -- Junta com a tabela de ranking, permitindo alunos sem ranking
+WHERE 
+   tbl_salas.id = 1  -- Filtra para incluir apenas alunos na sala cujo ID é 1
+ORDER BY 
+   tbl_alunos_ranks.pontos_rank DESC;  -- Ordena os resultados por pontos de forma decrescente
+
+
+
+
+CREATE VIEW vw_alunos_ranking_sala AS
+SELECT 
+    tbl_alunos.id AS id_aluno,
+    tbl_alunos.nome AS nome_aluno,
+    tbl_alunos_ranks.pontos_rank AS pontos_aluno,
+    ROW_NUMBER() OVER (ORDER BY tbl_alunos_ranks.pontos_rank DESC) AS posicao,
+    tbl_salas.id AS sala_id,
+    tbl_alunos_ranks.rank_id
+FROM 
+    tbl_alunos
+JOIN 
+    tbl_salas_alunos ON tbl_alunos.id = tbl_salas_alunos.aluno_id
+JOIN 
+    tbl_salas ON tbl_salas_alunos.sala_id = tbl_salas.id
+JOIN 
+    tbl_alunos_ranks ON tbl_alunos.id = tbl_alunos_ranks.aluno_id;
+
+
+SELECT * 
+FROM vw_alunos_ranking_sala
+WHERE sala_id = 1
+ORDER BY pontos_aluno DESC;
+
+
+---------------------------------------------------------------------------------------------------------
+

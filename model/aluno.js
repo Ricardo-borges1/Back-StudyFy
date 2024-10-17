@@ -96,8 +96,8 @@ const insertAluno = async function(dadosAluno) {
             '${dadosAluno.telefone}',
             '${dadosAluno.data_nascimento}',
             '${dadosAluno.serie}',
-            '${dadosAluno.pontos || 0}',  -- Usando valor padrão se não fornecido
-            '${dadosAluno.id_rank || 1}'   -- Usando valor padrão se não fornecido
+            '${dadosAluno.pontos || 0}',  
+            '${dadosAluno.id_rank || 1}'  
             )`; 
 
         console.log(sql);
@@ -169,7 +169,7 @@ const adicionarAlunoASala = async function(alunoId) {
         `);
         
 
-        console.log('ddddddddddd');
+     
         
 
         if (salaDisponivel.length > 0) {
