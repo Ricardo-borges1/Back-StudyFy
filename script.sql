@@ -114,6 +114,17 @@ CREATE TABLE  tbl_ranks(
 );
 
 
+
+DELETE FROM tbl_professor_materias 
+WHERE professor_id BETWEEN 21 AND 29;
+
+DELETE FROM tbl_professor 
+WHERE id BETWEEN 21 AND 29;
+
+
+
+
+
 -- Criação da tabela tbl_temporadas
 CREATE TABLE tbl_temporadas (
     id INT PRIMARY KEY AUTO_INCREMENT,
@@ -345,6 +356,68 @@ INSERT INTO tbl_temporadas (data_inicio, data_fim) VALUES
 INSERT INTO tbl_salas (id_rank, numero, max_pessoas, pessoas_atual, temporada_id) VALUES
 (1, 101, 25, 5, 1),
 (2, 102, 30, 10, 1);
+
+
+INSERT INTO tbl_professor (nome, email, senha, data_nascimento, telefone) VALUES
+('Professor 1', 'professor1@example.com', 'senha123', '1980-01-01', '1234567890'),
+('Professor 2', 'professor2@example.com', 'senha123', '1981-02-02', '1234567891'),
+('Professor 3', 'professor3@example.com', 'senha123', '1982-03-03', '1234567892'),
+('Professor 4', 'professor4@example.com', 'senha123', '1983-04-04', '1234567893'),
+('Professor 5', 'professor5@example.com', 'senha123', '1984-05-05', '1234567894'),
+('Professor 6', 'professor6@example.com', 'senha123', '1985-06-06', '1234567895'),
+('Professor 7', 'professor7@example.com', 'senha123', '1986-07-07', '1234567896'),
+('Professor 8', 'professor8@example.com', 'senha123', '1987-08-08', '1234567897'),
+('Professor 9', 'professor9@example.com', 'senha123', '1988-09-09', '1234567898'),
+('Professor 10', 'professor10@example.com', 'senha123', '1989-10-10', '1234567899'),
+('Professor 11', 'professor11@example.com', 'senha123', '1990-11-11', '1234567800'),
+('Professor 12', 'professor12@example.com', 'senha123', '1991-12-12', '1234567801'),
+('Professor 13', 'professor13@example.com', 'senha123', '1992-01-13', '1234567802'),
+('Professor 14', 'professor14@example.com', 'senha123', '1993-02-14', '1234567803'),
+('Professor 15', 'professor15@example.com', 'senha123', '1994-03-15', '1234567804'),
+('Professor 16', 'professor16@example.com', 'senha123', '1995-04-16', '1234567805'),
+('Professor 17', 'professor17@example.com', 'senha123', '1996-05-17', '1234567806'),
+('Professor 18', 'professor18@example.com', 'senha123', '1997-06-18', '1234567807'),
+('Professor 19', 'professor19@example.com', 'senha123', '1998-07-19', '1234567808'),
+('Professor 20', 'professor20@example.com', 'senha123', '1999-08-20', '1234567809'),
+('Professor 21', 'professor21@example.com', 'senha123', '2000-09-21', '1234567810'),
+('Professor 22', 'professor22@example.com', 'senha123', '2001-10-22', '1234567811'),
+('Professor 23', 'professor23@example.com', 'senha123', '2002-11-23', '1234567812'),
+('Professor 24', 'professor24@example.com', 'senha123', '2003-12-24', '1234567813'),
+('Professor 25', 'professor25@example.com', 'senha123', '2004-01-25', '1234567814'),
+('Professor 26', 'professor26@example.com', 'senha123', '2005-02-26', '1234567815'),
+('Professor 27', 'professor27@example.com', 'senha123', '2006-03-27', '1234567816'),
+('Professor 28', 'professor28@example.com', 'senha123', '2007-04-28', '1234567817'),
+('Professor 29', 'professor29@example.com', 'senha123', '2008-05-29', '1234567818'),
+('Professor 30', 'professor30@example.com', 'senha123', '2009-06-30', '1234567819'),
+('Professor 31', 'professor31@example.com', 'senha123', '2010-07-31', '1234567820'),
+('Professor 32', 'professor32@example.com', 'senha123', '2011-08-01', '1234567821'),
+('Professor 33', 'professor33@example.com', 'senha123', '2012-09-02', '1234567822'),
+('Professor 34', 'professor34@example.com', 'senha123', '2013-10-03', '1234567823'),
+('Professor 35', 'professor35@example.com', 'senha123', '2014-11-04', '1234567824'),
+('Professor 36', 'professor36@example.com', 'senha123', '2015-12-05', '1234567825'),
+('Professor 37', 'professor37@example.com', 'senha123', '2016-01-06', '1234567826'),
+('Professor 38', 'professor38@example.com', 'senha123', '2017-02-07', '1234567827'),
+('Professor 39', 'professor39@example.com', 'senha123', '2018-03-08', '1234567828'),
+('Professor 40', 'professor40@example.com', 'senha123', '2019-04-09', '1234567829'),
+('Professor 41', 'professor41@example.com', 'senha123', '2020-05-10', '1234567830'),
+('Professor 42', 'professor42@example.com', 'senha123', '2021-06-11', '1234567831'),
+('Professor 43', 'professor43@example.com', 'senha123', '2022-07-12', '1234567832'),
+('Professor 44', 'professor44@example.com', 'senha123', '2023-08-13', '1234567833'),
+('Professor 45', 'professor45@example.com', 'senha123', '2024-09-14', '1234567834'),
+('Professor 46', 'professor46@example.com', 'senha123', '2025-10-15', '1234567835'),
+('Professor 47', 'professor47@example.com', 'senha123', '2026-11-16', '1234567836'),
+('Professor 48', 'professor48@example.com', 'senha123', '2027-12-17', '1234567837'),
+('Professor 49', 'professor49@example.com', 'senha123', '2028-01-18', '1234567838'),
+('Professor 50', 'professor50@example.com', 'senha123', '2029-02-19', '1234567839');
+
+
+DELETE FROM tbl_professor 
+WHERE id BETWEEN 51 AND 69;
+
+
+
+
+
 
 -- Inserir dados na tabela tbl_alunos
 INSERT INTO tbl_alunos (nome, email, senha, data_nascimento, telefone, serie, pontos, id_rank) VALUES
