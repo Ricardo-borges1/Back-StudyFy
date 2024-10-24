@@ -336,24 +336,10 @@ const selectAlunosRank = async function(salaId) {
     try {
         // Realiza a busca dos alunos na sala especificada
         let sql = `
-            SELECT 
-                tbl_alunos.id AS id_aluno,
-                tbl_alunos.nome AS nome_aluno,
-                tbl_alunos_ranks.pontos_rank AS pontos_aluno,
-                ROW_NUMBER() OVER (ORDER BY tbl_alunos_ranks.pontos_rank DESC) AS posicao
-            FROM 
-                tbl_alunos 
-            JOIN 
-                tbl_salas_alunos ON tbl_alunos.id = tbl_salas_alunos.aluno_id
-            JOIN 
-                tbl_salas ON tbl_salas_alunos.sala_id = tbl_salas.id
-            JOIN 
-                tbl_alunos_ranks ON tbl_alunos.id = tbl_alunos_ranks.aluno_id
-            WHERE 
-                tbl_salas.id = ${salaId}  
-                AND tbl_alunos_ranks.rank_id = tbl_salas.id_rank 
-            ORDER BY 
-                tbl_alunos_ranks.pontos_rank DESC;
+           SELECT *
+    FROM vw_alunos_ranking_sala
+    JOIN tbl_salas_alunos ON vw_alunos_ranking_sala.id_aluno = tbl_salas_alunos.aluno_id
+    WHERE tbl_salas_alunos.sala_id = ${salaId};
         `;
 
         // Executa no banco de dados o script SQL
