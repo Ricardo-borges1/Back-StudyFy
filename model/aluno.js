@@ -86,6 +86,7 @@ const insertAluno = async function(dadosAluno) {
                     telefone,
                     data_nascimento,
                     serie,
+                    foto,
                     pontos,
                     id_rank
                 ) 
@@ -96,6 +97,7 @@ const insertAluno = async function(dadosAluno) {
             '${dadosAluno.telefone}',
             '${dadosAluno.data_nascimento}',
             '${dadosAluno.serie}',
+            '${dadosAluno.foto}',
             '${dadosAluno.pontos || 0}',  
             '${dadosAluno.id_rank || 1}'  
             )`; 
@@ -224,6 +226,7 @@ const updateAluno = async function(id, dadosAluno) {
                 telefone = '${dadosAluno.telefone}',
                 data_nascimento = '${dadosAluno.data_nascimento}',
                 serie = '${dadosAluno.serie}',
+                foto = '${dadosAluno.foto}',
                 pontos = '${dadosAluno.pontos || 0}',  -- Usando valor padrão se não fornecido
                 id_rank = ${dadosAluno.id_rank || 1}   -- Usando valor padrão se não fornecido
             WHERE id = ${id};

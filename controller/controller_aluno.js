@@ -330,6 +330,7 @@ const setAtualizarAluno = async function(id, dadosAluno, contentType) {
                     dadosAluno.telefone === '' || dadosAluno.telefone === undefined || dadosAluno.telefone === null || dadosAluno.telefone.length > 20 ||
                     dadosAluno.senha === '' || dadosAluno.senha === undefined || dadosAluno.senha === null || dadosAluno.senha.length > 25 ||
                     dadosAluno.serie === '' || dadosAluno.serie === undefined || dadosAluno.serie === null || dadosAluno.serie.length > 20 ||
+                    dadosAluno.foto === '' || dadosAluno.foto === undefined || dadosAluno.foto === null || dadosAluno.foto.length > 256 ||
                     dadosAluno.data_nascimento === '' || dadosAluno.data_nascimento === undefined || dadosAluno.data_nascimento === null ||
                     !isValidDate(dadosAluno.data_nascimento) ||
                     (dadosAluno.pontos !== undefined && (isNaN(dadosAluno.pontos) || dadosAluno.pontos < 0)) || // Validar pontos

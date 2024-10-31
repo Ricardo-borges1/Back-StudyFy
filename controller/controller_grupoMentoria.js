@@ -119,6 +119,7 @@ const setInserirNovoGrupoMentoria = async function(dadosGrupoMentoria, contentTy
                 dadosGrupoMentoria.capacidade === '' || dadosGrupoMentoria.capacidade === undefined || dadosGrupoMentoria.capacidade === null ||
                 dadosGrupoMentoria.descricao === '' || dadosGrupoMentoria.descricao === undefined || dadosGrupoMentoria.descricao === null || dadosGrupoMentoria.descricao.length > 255 ||
                 dadosGrupoMentoria.foto_perfil === '' || dadosGrupoMentoria.foto_perfil === undefined || dadosGrupoMentoria.foto_perfil === null || dadosGrupoMentoria.foto_perfil.length > 255 ||
+                dadosGrupoMentoria.materia === '' || dadosGrupoMentoria.materia === undefined || dadosGrupoMentoria.materia === null || dadosGrupoMentoria.materia.length > 256 ||
                 dadosGrupoMentoria.serie_min === '' || dadosGrupoMentoria.serie_min === undefined || dadosGrupoMentoria.serie_min === null || 
                 dadosGrupoMentoria.serie_max === '' || dadosGrupoMentoria.serie_max === undefined || dadosGrupoMentoria.serie_max === null ||
                 dadosGrupoMentoria.chat_aberto === '' || dadosGrupoMentoria.chat_aberto === undefined || dadosGrupoMentoria.chat_aberto === null ||
@@ -192,6 +193,7 @@ const setAtualizarGrupoMentoria = async function(id, dadosGrupoMentoria, content
                     dadosGrupoMentoria.capacidade === '' || dadosGrupoMentoria.capacidade === undefined || dadosGrupoMentoria.capacidade === null ||
                     dadosGrupoMentoria.descricao === '' || dadosGrupoMentoria.descricao === undefined || dadosGrupoMentoria.descricao === null || dadosGrupoMentoria.descricao.length > 255 ||
                     dadosGrupoMentoria.foto_perfil === '' || dadosGrupoMentoria.foto_perfil === undefined || dadosGrupoMentoria.foto_perfil === null || dadosGrupoMentoria.foto_perfil.length > 255 ||
+                    dadosGrupoMentoria.materia === '' || dadosGrupoMentoria.materia === undefined || dadosGrupoMentoria.materia === null || dadosGrupoMentoria.materia.length > 256 ||
                     dadosGrupoMentoria.serie_min === '' || dadosGrupoMentoria.serie_min === undefined || dadosGrupoMentoria.serie_min === null ||
                     dadosGrupoMentoria.serie_max === '' || dadosGrupoMentoria.serie_max === undefined || dadosGrupoMentoria.serie_max === null ||
                     dadosGrupoMentoria.chat_aberto === '' || dadosGrupoMentoria.chat_aberto === undefined || dadosGrupoMentoria.chat_aberto === null ||

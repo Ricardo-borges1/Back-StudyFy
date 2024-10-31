@@ -19,6 +19,7 @@ CREATE TABLE tbl_grupo_mentoria (
     capacidade INT NOT NULL,
     descricao TINYTEXT,
     foto_perfil VARCHAR(300),
+     materia varchar (256) NOT NULL,
     serie_min INT,
     serie_max INT,
     chat_aberto TINYINT,
@@ -146,10 +147,12 @@ CREATE TABLE tbl_alunos (
     data_nascimento DATE NOT NULL,
     telefone VARCHAR(20) NOT NULL,
     serie VARCHAR(20) NOT NULL,
+    foto varchar (256) NOT NULL,
     pontos INT DEFAULT 0,
     id_rank INT DEFAULT 1,
     FOREIGN KEY (id_rank) REFERENCES tbl_ranks(id)
 );
+
 
 CREATE TABLE tbl_salas_alunos (
     id INT AUTO_INCREMENT PRIMARY KEY NOT NULL,
@@ -187,7 +190,8 @@ CREATE TABLE tbl_professor (
     email VARCHAR(256),
     senha VARCHAR(25) NOT NULL,
     data_nascimento DATE NOT NULL,
-    telefone VARCHAR(20) NOT NULL
+    telefone VARCHAR(20) NOT NULL,
+    foto varchar (256) NOT NULL
 );
 
 -- Tabela tbl_professor_materias
@@ -289,8 +293,8 @@ INSERT INTO tbl_mentor (data_ingresso) VALUES
 
 
 -- Inserir dados na tabela tbl_grupo_mentoria
-INSERT INTO tbl_grupo_mentoria (nome, capacidade, descricao, foto_perfil, serie_min, serie_max, chat_aberto, mentor_id) VALUES
-('Grupo A', 10, 'Descrição do Grupo A', 'foto_grupo_a.jpg', 1, 3, 1, 1);
+INSERT INTO tbl_grupo_mentoria (nome, capacidade, descricao, foto_perfil, materia, serie_min, serie_max, chat_aberto, mentor_id) VALUES
+('Grupo A', 10, 'Descrição do Grupo A', 'foto_grupo_a.jpg', 'matemática', 1, 3, 1, 1);
 
 -- Inserir dados na tabela tbl_tipo_questao
 INSERT INTO tbl_tipo_questao (tipo_questao) VALUES
@@ -349,17 +353,17 @@ INSERT INTO tbl_salas (id_rank, numero, max_pessoas, pessoas_atual, temporada_id
 (2, 102, 30, 10, 1);
 
 
-INSERT INTO tbl_professor (nome, email, senha, data_nascimento, telefone) VALUES
-('Professor 1', 'professor1@example.com', 'senha123', '1980-01-01', '1234567890'),
-('Professor 2', 'professor2@example.com', 'senha123', '1981-02-02', '1234567891'),
-('Professor 3', 'professor3@example.com', 'senha123', '1982-03-03', '1234567892'),
-('Professor 50', 'professor50@example.com', 'senha123', '2029-02-19', '1234567839');
+INSERT INTO tbl_professor (nome, email, senha, data_nascimento, telefone, foto) VALUES
+('Professor 1', 'professor1@example.com', 'senha123', '1980-01-01', '1234567890', 'foto_grupo_a.jpg'),
+('Professor 2', 'professor2@example.com', 'senha123', '1981-02-02', '1234567891', 'foto_grupo_a.jpg'),
+('Professor 3', 'professor3@example.com', 'senha123', '1982-03-03', '1234567892', 'foto_grupo_a.jpg'),
+('Professor 50', 'professor50@example.com', 'senha123', '2029-02-19', '1234567839', 'foto_grupo_a.jpg');
 
 
 -- Inserir dados na tabela tbl_alunos
-INSERT INTO tbl_alunos (nome, email, senha, data_nascimento, telefone, serie, pontos, id_rank) VALUES
-('Aluno 1', 'aluno1@example.com', 'senha123', '2005-01-01', '123456789', '1ª série', 0, 1),
-('Aluno 2', 'aluno2@example.com', 'senha456', '2005-02-01', '987654321', '2ª série', 0, 1);
+INSERT INTO tbl_alunos (nome, email, senha, data_nascimento, telefone, serie, foto,  pontos, id_rank) VALUES
+('Aluno 1', 'aluno1@example.com', 'senha123', '2005-01-01', '123456789', '1ª série', 'foto_grupo_a.jpg', 0, 1),
+('Aluno 2', 'aluno2@example.com', 'senha456', '2005-02-01', '987654321', '2ª série', 'foto_grupo_a.jpg', 0, 1);
 
 
 -- Inserir dados na tabela tbl_salas_alunos
@@ -378,10 +382,6 @@ INSERT INTO tbl_alunos_materias (aluno_id, materia_id) VALUES
 (1, 2),
 (2, 3);
 
--- Inserir dados na tabela tbl_professor
-INSERT INTO tbl_professor (nome, email, senha, data_nascimento, telefone) VALUES
-('Professor A', 'professor_a@example.com', 'senha123', '1980-01-01', '123456789'),
-('Professor B', 'professor_b@example.com', 'senha456', '1985-02-01', '987654321');
 
 -- Inserir dados na tabela tbl_professor_materias
 INSERT INTO tbl_professor_materias (professor_id, materia_id) VALUES

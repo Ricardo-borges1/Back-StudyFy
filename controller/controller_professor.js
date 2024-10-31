@@ -196,6 +196,7 @@ const setInserirNovoProfessor = async function(dadosProfessores, contentType) {
             if (dadosProfessores.nome === '' || dadosProfessores.nome === undefined || dadosProfessores.nome === null || dadosProfessores.nome.length > 100 ||
             dadosProfessores.email === '' || dadosProfessores.email === undefined || dadosProfessores.email === null || dadosProfessores.email.length > 100 ||
             dadosProfessores.telefone === '' || dadosProfessores.telefone === undefined || dadosProfessores.telefone === null || dadosProfessores.telefone.length > 12 ||
+            dadosProfessores.foto === '' || dadosProfessores.foto === undefined || dadosProfessores.foto === null || dadosProfessores.foto.length > 256 ||
             dadosProfessores.senha === '' ||dadosProfessores.senha === undefined || dadosProfessores.senha === null || dadosProfessores.senha.length > 255 ||
             dadosProfessores.data_nascimento === '' ||dadosProfessores.data_nascimento === undefined || dadosProfessores.data_nascimento === null || dadosProfessores.data_nascimento.length !== 10 ||
                 !isValidDate(dadosProfessores.data_nascimento) ||
@@ -263,6 +264,7 @@ const setAtualizarProfessor = async function(id, dadosProfessores, contentType) 
                 if (dadosProfessores.nome === '' || dadosProfessores.nome === undefined || dadosProfessores.nome === null || dadosProfessores.nome.length > 100 ||
                  dadosProfessores.email === '' || dadosProfessores.email === undefined || dadosProfessores.email === null || dadosProfessores.email.length > 100 ||
             dadosProfessores.telefone === '' || dadosProfessores.telefone === undefined || dadosProfessores.telefone === null || dadosProfessores.telefone.length > 12 ||
+            dadosProfessores.foto === '' || dadosProfessores.foto === undefined || dadosProfessores.foto === null || dadosProfessores.foto.length > 256 ||
             dadosProfessores.senha === '' ||dadosProfessores.senha === undefined || dadosProfessores.senha === null || dadosProfessores.senha.length > 255 ||
             dadosProfessores.data_nascimento === '' ||dadosProfessores.data_nascimento === undefined || dadosProfessores.data_nascimento === null || dadosProfessores.data_nascimento.length !== 10 ||
                 !isValidDate(dadosProfessores.data_nascimento) ||

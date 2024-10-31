@@ -58,6 +58,7 @@ const insertProfessor = async function(dadosProfessores) {
                             email,
                             senha,
                             telefone,
+                            foto,
                             data_nascimento
                         ) 
          VALUES 
@@ -65,6 +66,7 @@ const insertProfessor = async function(dadosProfessores) {
            '${dadosProfessores.email}',
            '${dadosProfessores.senha}',
            '${dadosProfessores.telefone}',
+           '${dadosProfessores.foto}',
            '${dadosProfessores.data_nascimento}'        
            )`; 
            
@@ -138,6 +140,7 @@ const updateProfessor = async function(id, dadosProfessores) {
                 email = '${dadosProfessores.email}',
                 senha = '${dadosProfessores.senha}',
                 telefone = '${dadosProfessores.telefone}',
+                foto = '${dadosProfessores.foto}',
                 data_nascimento = '${dadosProfessores.data_nascimento}'
             WHERE id = ${id};
         `;
