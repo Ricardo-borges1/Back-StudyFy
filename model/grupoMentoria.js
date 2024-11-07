@@ -136,12 +136,126 @@ const lastIDGrupoMentoria = async function(){
     
 }
 
+
+const buscarInformacoesTodosGruposMentoria = async () => {
+    try {
+        const sql = `
+            SELECT 
+    grupo_mentoria.id AS id_grupo,               -- id do grupo
+    grupo_mentoria.foto_perfil AS foto_grupo,
+    grupo_mentoria.nome AS nome_grupo,
+    grupo_mentoria.materia AS materia_grupo,      -- Coluna para matéria do grupo
+    COUNT(DISTINCT resposta_duvida.id_resposta_duvida) AS quantidade_duvidas_respondidas,
+    COUNT(DISTINCT membros.id) AS quantidade_membros,
+    grupo_mentoria.capacidade AS capacidade_grupo
+FROM 
+    tbl_grupo_mentoria AS grupo_mentoria
+LEFT JOIN 
+    tbl_membros AS membros ON grupo_mentoria.id = membros.grupo_mentoria_id
+LEFT JOIN 
+    tbl_duvida_compartilhada AS duvida_compartilhada ON duvida_compartilhada.membro_id = membros.id
+LEFT JOIN 
+    tbl_resposta_duvida AS resposta_duvida ON resposta_duvida.duvida_compartilhada_id = duvida_compartilhada.id
+GROUP BY 
+    grupo_mentoria.id;
+        `;        
+        
+        const resultado = await prisma.$queryRawUnsafe(sql);        
+
+                // Converte os valores de BigInt para string
+                const resultadoConvertido = resultado.map(grupo => ({
+                    id: grupo.id_grupo,
+                    foto_grupo: grupo.foto_grupo,
+                    nome_grupo: grupo.nome_grupo,
+                    materia_grupo: grupo.materia_grupo,
+                    quantidade_duvidas_respondidas: grupo.quantidade_duvidas_respondidas.toString(),
+                    quantidade_membros: grupo.quantidade_membros.toString(),
+                    capacidade_grupo: grupo.capacidade_grupo
+                }));
+        console.log(resultadoConvertido);
+        
+        return resultadoConvertido;
+    } catch (error) {
+        console.error('Erro ao buscar informações de todos os grupos de mentoria no DAO:', error);
+        throw error;
+    }
+};
+
+const selectGruposAluno = async(idAluno) => {
+    
+    try {
+        let sql = `SELECT 
+    g.id AS grupo_id,
+    g.nome AS nome_grupo,
+    g.foto_perfil AS foto_grupo,
+    g.materia AS materia_grupo
+FROM 
+    tbl_grupo_mentoria g
+JOIN 
+    tbl_membros m ON m.grupo_mentoria_id = g.id
+WHERE 
+    m.aluno_id = ${idAluno.id};`
+
+        let result = await prisma.$queryRawUnsafe(sql)
+
+        console.log(result);
+        
+
+        return result
+    } catch (error) {
+        console.log('erro');
+        
+    }
+}
+
+const selectMentorByGrupoId = async (idGrupo) => {
+    try {
+        // Consulta SQL para pegar o mentor com base no ID do grupo de mentoria
+        const sql = `
+            SELECT 
+                tbl_mentor.id AS mentor_id,
+                COALESCE(tbl_professor.nome, tbl_alunos.nome) AS mentor_nome,  -- Pega o nome, seja de professor ou aluno
+                CASE
+                    WHEN tbl_professor.id IS NOT NULL THEN 'Professor'
+                    WHEN tbl_alunos.id IS NOT NULL THEN 'Aluno/mentor'
+                END AS mentor_tipo  -- Identifica se o mentor é um professor ou aluno
+            FROM 
+                tbl_grupo_mentoria
+            LEFT JOIN 
+                tbl_membros ON tbl_membros.grupo_mentoria_id = tbl_grupo_mentoria.id
+            LEFT JOIN 
+                tbl_mentor ON tbl_mentor.id = tbl_grupo_mentoria.mentor_id
+            LEFT JOIN 
+                tbl_professor ON tbl_professor.id = tbl_mentor.id  -- Junta com professor
+            LEFT JOIN 
+                tbl_alunos ON tbl_alunos.id = tbl_mentor.id  -- Junta com aluno
+            WHERE 
+                tbl_grupo_mentoria.id = ${idGrupo}
+            GROUP BY 
+                tbl_grupo_mentoria.id, tbl_mentor.id;
+        `;
+
+        // Executa a consulta SQL, passando o ID do grupo como parâmetro
+        const result = await prisma.$queryRawUnsafe(sql);
+
+        // Retorna os dados encontrados (se houver)
+        return result;
+
+    } catch (error) {
+        console.error('Erro ao consultar mentor do grupo:', error);
+        throw error;
+    }
+};
+
 // Exporta as funções
 module.exports = {
+    selectMentorByGrupoId,
+    selectGruposAluno,
     selectGrupoMentoriaByID,
     selectAllGruposMentoria,
     insertGrupoMentoria,
     updateGrupoMentoria,
     deleteGrupoMentoria,
-    lastIDGrupoMentoria
+    lastIDGrupoMentoria,
+    buscarInformacoesTodosGruposMentoria,
 }

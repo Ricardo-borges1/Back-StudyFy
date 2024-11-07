@@ -226,7 +226,70 @@ const setAtualizarGrupoMentoria = async function(id, dadosGrupoMentoria, content
     }
 };
 
+const getInformacoesTodosGruposMentoria = async () => {
+    try {        
+
+        console.log('oioioi');
+        
+        const resultado = await grupoMentoriaDAO.buscarInformacoesTodosGruposMentoria();
+
+        if (!resultado || resultado.length === 0) {
+            return null; // Caso não encontre grupos de mentoria
+        }
+
+        return resultado; // Retorna todos os grupos encontrados
+    } catch (error) {
+        console.error('Erro no controller ao buscar todos os grupos de mentoria:', error);
+        throw error;
+    }
+};
+
+const getGruposMentoriasAluno = async (idAluno, contentType) => {
+    try {
+        
+        if (String(contentType).toLowerCase() === 'application/json') {
+
+            const resultado = await grupoMentoriaDAO.selectGruposAluno(idAluno);
+
+            if (!resultado || resultado.length === 0) {
+                return null; // Caso não encontre grupos de mentoria
+            }
+    
+            return resultado; // Retorna todos os grupos encontrados
+
+        }
+    } catch (error) {
+        console.error('Erro no controller ao buscar todos os grupos de mentoria:', error);
+        throw error;
+    }
+};
+
+const getMentorByGrupoId = async (idGrupo) => {
+    try {
+        // Chama a função do model para pegar os dados do mentor, com base no ID do grupo
+        const dadosMentoria = await grupoMentoriaDAO.selectMentorByGrupoId(idGrupo);
+        
+        // Se o retorno for vazio, retorna um erro
+        if (!dadosMentoria || dadosMentoria.length === 0) {
+            return { status_code: 404, message: 'Grupo de mentoria não encontrado ou sem mentor associado.' };
+        }
+
+        // Se encontrar o mentor, retorna com o status 200
+        return {
+            status_code: 200,
+            mentor: dadosMentoria[0]  // Retorna o mentor encontrado
+        };
+    } catch (error) {
+        console.error('Erro ao buscar mentor de grupo de mentoria:', error);
+        return { status_code: 500, message: 'Erro interno ao buscar mentor' };
+    }
+};
+
+
 module.exports = {
+    getMentorByGrupoId,
+    getGruposMentoriasAluno,
+    getInformacoesTodosGruposMentoria,
     getListarGruposMentoria,
     getBuscarGrupoMentoriaId,
     setInserirNovoGrupoMentoria,

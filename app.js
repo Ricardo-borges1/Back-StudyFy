@@ -386,6 +386,62 @@ app.put('/v1/studyfy/mentorias/:id', cors(), bodyParserJSON, async function(requ
     }
 });
 
+
+app.get('/v1/studyfy/gruposMentoria', cors(), async function(request, response) {
+    try {
+
+        console.log('yyyy');
+        
+        const resultadoGrupos = await controllerGrupoMentoria.getInformacoesTodosGruposMentoria();
+
+        if (!resultadoGrupos || resultadoGrupos.length === 0) {
+            return response.status(404).json({ message: 'Nenhum grupo de mentoria encontrado.' });
+        }
+
+        response.status(200).json(resultadoGrupos);
+    } catch (error) {
+        console.error('Erro ao buscar informações dos grupos de mentoria:', error);
+        response.status(500).json({ status_code: 500, message: 'Erro interno do servidor' });
+    }
+});
+
+app.post('/v1/studyfy/grupoMentoriaAluno', cors(), bodyParserJSON, async function(request, response) {
+    try {
+        // Recebe o content-type da requisição
+        let contentType = request.headers['content-type'];
+        
+        // Recebe todos os dados encaminhados na requisição pelo body
+        let dadosBody = request.body;
+        
+        // Encaminha os dados para a controller
+        let result = await controllerGrupoMentoria.getGruposMentoriasAluno(dadosBody, contentType);
+        
+        // Define o status da resposta e envia os dados de volta
+        response.status(200);
+        response.json(result);
+    } catch (error) {
+        console.error('Erro ao buscar os grupos no qual faz parte:', error);
+        response.status(500).json({ status_code: 500, message: 'Erro interno do servidor' });
+    }
+});
+
+app.get('/v1/studyfy/mentorGrupo/:id', async function(request, response) {
+    try {
+        const idMentoria = request.params.id;
+        const dadosMentoria = await controllerGrupoMentoria.getMentorByGrupoId(idMentoria);
+        
+        response.status(dadosMentoria.status_code);
+        response.json(dadosMentoria);
+    } catch (error) {
+        console.error('Erro ao buscar mentor do grupo de mentoria:', error);
+        response.status(500).json({ status_code: 500, message: 'Erro interno do servidor' });
+    }
+});
+
+
+
+
+
   
 
 
