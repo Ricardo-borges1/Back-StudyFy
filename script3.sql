@@ -358,7 +358,9 @@ INSERT INTO tbl_questao (enunciado, tipo_questao_id, imagem, atividade_grupo_men
 ('O céu é azul?', 2, NULL, 1),
 ('Organize as Guerras de forma crescente na sequência correta', 4, NULL, 1),
 ('Coloque a capital correspondente ao País', 5, NULL, 1),
-('4 x 3 é igual a 13? ', 2, NULL, 1);
+('4 x 3 é igual a 13? ', 2, NULL, 1),
+('Coloque os resultados correspondentes das equações', 5, NULL, 1);
+
 
 -- Inserir dados na tabela tbl_resposta_lacunas
 INSERT INTO tbl_resposta_lacunas (posicao_inicial, posicao_fim, questao_id, palavra) VALUES
@@ -375,7 +377,10 @@ INSERT INTO tbl_resposta_correspondencia (palavra_correspondente, resposta_corre
 ('Japão', 'Tóquio', 5),
 ('Egito', 'Cairo', 5),
 ('Equador', 'Quito', 5),
-('Austrália', 'Camberra', 5);
+('8', '5 + 3', 6),
+('7', '20 - 13', 6),
+('72', '12 x 6', 6),
+('27', '54 dividido por 2', 6);
 
 -- Inserir dados na tabela tbl_resposta_multipla_escolha
 INSERT INTO tbl_resposta_multipla_escolha (conteudo, autenticacao, questao_id) VALUES
