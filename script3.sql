@@ -59,7 +59,7 @@ CREATE TABLE tbl_tipo_questao (
 -- Tabela tbl_questao
 CREATE TABLE tbl_questao (
     id INT AUTO_INCREMENT PRIMARY KEY NOT NULL,
-    enunciado VARCHAR(45) NOT NULL,
+    enunciado VARCHAR(245) NOT NULL,
     tipo_questao_id INT NOT NULL,
     imagem VARCHAR(300),
     atividade_grupo_mentoria_id INT NOT NULL,
@@ -344,7 +344,9 @@ INSERT INTO tbl_grupo_mentoria (nome, capacidade, descricao, imagem_id, materia,
 INSERT INTO tbl_tipo_questao (tipo_questao) VALUES
 ('Múltipla Escolha'),
 ('Verdadeiro ou Falso'),
-('Preenchimento de Lacunas');
+('Preenchimento de Lacunas'),
+('Organize as frases'),
+('Correspondencia');
 
 -- Inserir dados na tabela tbl_atividade_grupo_mentoria
 INSERT INTO tbl_atividade_grupo_mentoria (nome, descricao, grupo_mentoria_id) VALUES
@@ -353,7 +355,10 @@ INSERT INTO tbl_atividade_grupo_mentoria (nome, descricao, grupo_mentoria_id) VA
 -- Inserir dados na tabela tbl_questao
 INSERT INTO tbl_questao (enunciado, tipo_questao_id, imagem, atividade_grupo_mentoria_id) VALUES
 ('Qual é a capital do Brasil?', 1, 'imagem1.jpg', 1),
-('O céu é azul?', 2, NULL, 1);
+('O céu é azul?', 2, NULL, 1),
+('Organize as Guerras de forma crescente na sequência correta', 4, NULL, 1),
+('Coloque a capital correspondente ao País', 5, NULL, 1),
+('4 x 3 é igual a 13? ', 2, NULL, 1);
 
 -- Inserir dados na tabela tbl_resposta_lacunas
 INSERT INTO tbl_resposta_lacunas (posicao_inicial, posicao_fim, questao_id, palavra) VALUES
@@ -361,20 +366,30 @@ INSERT INTO tbl_resposta_lacunas (posicao_inicial, posicao_fim, questao_id, pala
 
 -- Inserir dados na tabela tbl_resposta_verdadeiro_falso
 INSERT INTO tbl_resposta_verdadeiro_falso (autenticacao, questao_id, conteudo) VALUES
-(1, 2, 'Sim');
+(1, 2, 'Sim'),
+(0, 2, 'Não');
 
 -- Inserir dados na tabela tbl_resposta_correspondencia
 INSERT INTO tbl_resposta_correspondencia (palavra_correspondente, resposta_correspondente, questao_id) VALUES
-('Brasil', 'Brasília', 1);
+('Brasil', 'Brasília', 5),
+('Japão', 'Tóquio', 5),
+('Egito', 'Cairo', 5),
+('Equador', 'Quito', 5),
+('Austrália', 'Camberra', 5);
 
 -- Inserir dados na tabela tbl_resposta_multipla_escolha
 INSERT INTO tbl_resposta_multipla_escolha (conteudo, autenticacao, questao_id) VALUES
 ('Brasília', 1, 1),
-('Rio de Janeiro', 0, 1);
+('Rio de Janeiro', 0, 1),
+('Salvador', 0, 1),
+('Sergipe', 0, 1),
+('São Paulo', 0, 1);
 
 -- Inserir dados na tabela tbl_ordem_palavra
 INSERT INTO tbl_ordem_palavra (posicao, questao_id, conteudo) VALUES
-(1, 1, 'Brasília');
+(1, 4, 'Primeiro Guerra Mundial'),
+(2, 4, 'Segunda Guerra Mundial'),
+(3, 4, 'Guerra Fria');
 
 -- Inserir dados na tabela tbl_materias
 INSERT INTO tbl_materias (nome_materia) VALUES
