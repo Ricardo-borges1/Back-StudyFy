@@ -49,6 +49,7 @@ const controllerTemporadas = require ('./controller/controller_temporada.js')
 const controllerEmblema = require ('./controller/controller_emblema.js')
 const controllerNivelEmblema = require ('./controller/controller_nivelEmblema.js')
 const controllerAlunoEmblema = require ('./controller/controller_alunoEmblema.js')
+const controllerImgsGrupoMentoria = require ('./controller/controller_imgsGrupoMentoria.js')
 
 
 /*******************************************************************************************************/
@@ -1461,6 +1462,19 @@ app.delete('/v1/studyfy/aluno-emblema/:id', async (req, res) => {
     let idAlunoEmblema = req.params.id;
     let resultado = await controllerAlunoEmblema.setExcluirAlunoEmblema(idAlunoEmblema);
     res.status(resultado.status_code).json(resultado);
+});
+
+//adicionar
+
+app.get('/v1/studyfy/imagens/grupo-mentoria', async (req, res) => {
+    try {
+
+        let imagens = await controllerImgsGrupoMentoria.getListarImgs()
+        res.json(imagens); // Retorna os resultados como JSON
+    } catch (error) {
+        console.error('Erro ao buscar imagens:', error);
+        res.status(500).json({ error: 'Erro ao buscar imagens' });
+    }
 });
 
 

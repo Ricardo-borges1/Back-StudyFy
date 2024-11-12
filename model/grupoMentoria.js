@@ -15,12 +15,39 @@ const prisma = new PrismaClient()
 const selectGrupoMentoriaByID = async function(id) {
     try {
         // Realiza a busca do grupo de mentoria pelo ID
-        let sql = `SELECT * FROM tbl_grupo_mentoria WHERE id = ${id}`;
+        let sql = `SELECT 
+    tbl_grupo_mentoria.*, 
+    COUNT(tbl_membros.id) AS quantidade_membros
+FROM 
+    tbl_grupo_mentoria
+LEFT JOIN 
+    tbl_membros ON tbl_grupo_mentoria.id = tbl_membros.grupo_mentoria_id
+WHERE 
+    tbl_grupo_mentoria.id = ${id}
+GROUP BY 
+    tbl_grupo_mentoria.id;
+`;
 
         // Executa no banco de dados o script SQL
-        let rsGrupoMentoria = await prisma.$queryRawUnsafe(sql);
+        let rsGrupoMentoria = await prisma.$queryRawUnsafe(sql);        
 
-        return rsGrupoMentoria;
+        const resultadoConvertido = rsGrupoMentoria.map(grupo => ({
+            id: grupo.id,
+            nome: grupo.nome,
+            capacidade: grupo.capacidade,
+            descricao: grupo.descricao,
+            materia: grupo.materia,
+            serie_min: grupo.serie_min,
+            serie_max: grupo.serie_max,
+            imagem_id: grupo.imagem_id,
+            chat_aberto: grupo.chat_aberto,
+            data_criacao: grupo.data_criacao,
+            mentor_id: grupo.mentor_id,
+            quantidade_membros: grupo.quantidade_membros.toString(), // Apenas converte quantidade_membros
+        }));
+                
+
+        return resultadoConvertido;
     } catch (error) {
         console.log(error);
         return false;
@@ -142,7 +169,7 @@ const buscarInformacoesTodosGruposMentoria = async () => {
         const sql = `
             SELECT 
     grupo_mentoria.id AS id_grupo,               -- id do grupo
-    grupo_mentoria.foto_perfil AS foto_grupo,
+    grupo_mentoria.imagem_id AS foto_grupo,
     grupo_mentoria.nome AS nome_grupo,
     grupo_mentoria.materia AS materia_grupo,      -- Coluna para matéria do grupo
     COUNT(DISTINCT resposta_duvida.id_resposta_duvida) AS quantidade_duvidas_respondidas,
@@ -187,7 +214,7 @@ const selectGruposAluno = async(idAluno) => {
         let sql = `SELECT 
     g.id AS grupo_id,
     g.nome AS nome_grupo,
-    g.foto_perfil AS foto_grupo,
+    g.imagem_id AS foto_perfil,
     g.materia AS materia_grupo
 FROM 
     tbl_grupo_mentoria g
@@ -195,6 +222,9 @@ JOIN
     tbl_membros m ON m.grupo_mentoria_id = g.id
 WHERE 
     m.aluno_id = ${idAluno.id};`
+
+    console.log(sql);
+    
 
         let result = await prisma.$queryRawUnsafe(sql)
 
