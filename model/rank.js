@@ -82,7 +82,45 @@ const selectByIdRank = async function (id) {
     }
 };
 
+const selectSalaRankByIdAluno = async function (id) {
+    try {
+        let sql = `SELECT
+    vw_alunos_ranking_sala.*,
+    tbl_salas.*,
+    tbl_imagens_usuario.caminho_imagem,
+    tbl_imagens_usuario.nome_imagem
+FROM
+    vw_alunos_ranking_sala
+JOIN
+    tbl_salas_alunos ON vw_alunos_ranking_sala.id_aluno = tbl_salas_alunos.aluno_id
+JOIN
+    tbl_salas ON tbl_salas_alunos.sala_id = tbl_salas.id
+JOIN
+    tbl_alunos ON vw_alunos_ranking_sala.id_aluno = tbl_alunos.id
+JOIN
+    tbl_imagens_usuario ON tbl_alunos.imagem_id = tbl_imagens_usuario.id  -- Alterado para tbl_imagens_usuario
+WHERE
+    tbl_salas_alunos.sala_id = (SELECT sala_id FROM tbl_salas_alunos WHERE aluno_id = ${id})
+ORDER BY
+    vw_alunos_ranking_sala.pontos_aluno DESC;`;
+        let rsRanks = await prisma.$queryRawUnsafe(sql);
+
+        console.log(rsRanks);
+
+        const dadosConvertidos = rsRanks.map(item => ({
+            ...item,
+            posicao: Number(item.posicao) // Converte BigInt para Number
+          }));
+
+        return dadosConvertidos;
+    } catch (error) {
+        console.log(error);
+        return false;
+    }
+};
+
 module.exports = {
+    selectSalaRankByIdAluno,
     selectRank,
     lastIDRank,
     insertRanks,

@@ -1265,6 +1265,17 @@ app.get('/v1/studyfy/rank/:id', async (req, res) => {
     res.status(resultado.status_code).json(resultado);
 });
 
+app.get('/v1/studyfy/rank/aluno/:id', async (req, res) => {
+    let idAluno = req.params.id;
+    let resultado = await controllerRank.getBuscarSalaRankIdAluno(idAluno);
+
+    if(resultado) {
+        res.status(200).json(resultado);
+    } else{
+        res.status(400).json(resultado);
+    }
+});
+
 
 // Endpoint: Inserir nova resposta de lacunas
 app.post('/v1/studyfy/rank', cors(), bodyParserJSON, async function(request, response) {

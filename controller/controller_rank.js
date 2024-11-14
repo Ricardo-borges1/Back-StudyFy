@@ -146,7 +146,29 @@ function validateRank(dadosRank) {
     return null;
 }
 
+const getBuscarSalaRankIdAluno = async function (id) {
+    try {
+        let idAluno = id;
+        if (!idAluno || isNaN(idAluno)) return message.ERROR_INVALID_ID;
+
+        let dadosRank = await rankDAO.selectSalaRankByIdAluno(idAluno);
+        if (dadosRank) {
+            if (dadosRank.length > 0) {
+                return { sala: dadosRank, status_code: 200 };
+            } else {
+                return message.ERROR_NOT_FOUND;
+            }
+        } else {
+            return message.ERROR_INTERNAL_SERVER_DB;
+        }
+    } catch (error) {
+        console.log(error);
+        return message.ERROR_INTERNAL_SERVER;
+    }
+};
+
 module.exports = {
+    getBuscarSalaRankIdAluno,
     getRank,
     getBuscarRankId,
     setInserirNovoRank,

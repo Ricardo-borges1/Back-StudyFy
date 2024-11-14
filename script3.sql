@@ -112,7 +112,6 @@ CREATE TABLE tbl_ordem_palavra (
     FOREIGN KEY (questao_id) REFERENCES tbl_questao(id)
 );
 
-drop table tbl_ordem_palavra;
 
 -- Tabela tbl_materias
 CREATE TABLE tbl_materias (
@@ -518,7 +517,6 @@ JOIN
 
 SELECT * FROM vw_alunos_sala_1 where id_sala = 1;
     
-drop view vw_alunos_sala_1;
     
     ---------------------------------------------------------------------------------------------------------------------
 
@@ -554,7 +552,6 @@ WHERE
         )
     );
 
-    drop view vw_emblemas_aluno;
     
     SELECT * FROM vw_emblemas_aluno2 WHERE id_aluno = 1;
 
@@ -584,7 +581,6 @@ FROM vw_emblemas_nao_conquistados
 WHERE id_aluno = 2;
 
     
-drop view vw_emblemas_nao_conquistados;
     
   
     
@@ -614,7 +610,6 @@ FROM vw_alunos_ranking_sala
 JOIN tbl_salas_alunos ON vw_alunos_ranking_sala.id_aluno = tbl_salas_alunos.aluno_id
 WHERE tbl_salas_alunos.sala_id = 1;  -- Substitua 1 pelo ID da sala desejada
 
-    drop view vw_alunos_ranking_sala_1;
     
 
     ---------------------------------------------------------------------------------------------------------------------
@@ -632,7 +627,6 @@ JOIN
     tbl_alunos ON tbl_alunos.id = tbl_alunos_ranks.aluno_id;
     
     
-drop view vw_informacoes_alunos_ranking;
     
 SELECT * 
 FROM vw_informacoes_alunos_ranking
@@ -929,20 +923,25 @@ WHERE mentor_id = 1;  -- Substitua 3 pelo ID do mentor desejado
 
      ---------------------------------------------------------------------------------------------------------------------
 
-CREATE VIEW vw_duvidas_grupo_mentoria AS
-SELECT 
-    duvida.id AS id_duvida,
-    duvida.conteudo AS conteudo_duvida,
-    duvida.data_envio,
-    duvida.respondida,
-    membro.aluno_id,
-    grupo.id AS id_grupo_mentoria  -- Alterado para retornar o ID do grupo de mentoria
-FROM 
-    tbl_duvida_compartilhada AS duvida
-JOIN 
-    tbl_membros AS membro ON duvida.membro_id = membro.id
-JOIN 
-    tbl_grupo_mentoria AS grupo ON membro.grupo_mentoria_id = grupo.id;
+SELECT
+    vw_alunos_ranking_sala.*,
+    tbl_salas.*,
+    tbl_imagens_usuario.caminho_imagem,
+    tbl_imagens_usuario.nome_imagem
+FROM
+    vw_alunos_ranking_sala
+JOIN
+    tbl_salas_alunos ON vw_alunos_ranking_sala.id_aluno = tbl_salas_alunos.aluno_id
+JOIN
+    tbl_salas ON tbl_salas_alunos.sala_id = tbl_salas.id
+JOIN
+    tbl_alunos ON vw_alunos_ranking_sala.id_aluno = tbl_alunos.id
+JOIN
+    tbl_imagens_usuario ON tbl_alunos.imagem_id = tbl_imagens_usuario.id  -- Alterado para tbl_imagens_usuario
+WHERE
+    tbl_salas_alunos.sala_id = (SELECT sala_id FROM tbl_salas_alunos WHERE aluno_id = 1)
+ORDER BY
+    vw_alunos_ranking_sala.pontos_aluno DESC;
     
     
     SELECT * 
