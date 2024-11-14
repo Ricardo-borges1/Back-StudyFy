@@ -109,7 +109,7 @@ CREATE TABLE tbl_ordem_palavra (
     id INT AUTO_INCREMENT PRIMARY KEY NOT NULL,
     posicao INT NOT NULL,
     questao_id INT NOT NULL,
-    conteudo VARCHAR(45) NOT NULL,
+    conteudo VARCHAR(245) NOT NULL,
     FOREIGN KEY (questao_id) REFERENCES tbl_questao(id)
 );
 
@@ -594,22 +594,26 @@ drop view vw_emblemas_nao_conquistados;
     
       ---------------------------------------------------------------------------------------------------------------------
     
-   CREATE VIEW vw_alunos_ranking_sala AS
 SELECT 
-    tbl_alunos.id AS id_aluno,
-    tbl_alunos.nome AS nome_aluno,
-    tbl_alunos_ranks.pontos_rank AS pontos_aluno,
-    ROW_NUMBER() OVER (ORDER BY tbl_alunos_ranks.pontos_rank DESC) AS posicao
+    vw_alunos_ranking_sala.*, 
+    tbl_salas.*, 
+    tbl_imagens_usuario.caminho_imagem,
+    tbl_imagens_usuario.nome_imagem
 FROM 
-    tbl_alunos 
+    vw_alunos_ranking_sala
 JOIN 
-    tbl_salas_alunos ON tbl_alunos.id = tbl_salas_alunos.aluno_id
+    tbl_salas_alunos ON vw_alunos_ranking_sala.id_aluno = tbl_salas_alunos.aluno_id
 JOIN 
     tbl_salas ON tbl_salas_alunos.sala_id = tbl_salas.id
-LEFT JOIN 
-    tbl_alunos_ranks ON tbl_alunos.id = tbl_alunos_ranks.aluno_id
+JOIN 
+    tbl_alunos ON vw_alunos_ranking_sala.id_aluno = tbl_alunos.id
+JOIN 
+    tbl_imagens_usuario ON tbl_alunos.imagem_id = tbl_imagens_usuario.id  -- Alterado para tbl_imagens_usuario
+WHERE 
+    tbl_salas_alunos.sala_id = (SELECT sala_id FROM tbl_salas_alunos WHERE aluno_id = 1)
 ORDER BY 
-    tbl_alunos_ranks.pontos_rank DESC;  -- Ordena os resultados por pontos de forma decrescente
+    vw_alunos_ranking_sala.pontos_aluno DESC;
+
 
 
 
