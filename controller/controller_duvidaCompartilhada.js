@@ -9,35 +9,27 @@ const { Prisma } = require('@prisma/client');
 const duvidaCompartilhadaDAO = require ('../model/duvidaCompartilhada.js')
 const message = require('./modulo/config.js');
 
-
+// Função para listar todas as dúvidas
 const getListarAllDuvidas = async function() {
     try {
-        // Criar o objeto JSON
         let duvidasJSON = {};
-        
-        // Chamar a função do DAO para retornar os dados da tabela de produtos
-        
         let dadosDuvidas = await duvidaCompartilhadaDAO.selectAllDuvidas();
 
-        // Validação para verificar se existem dados 
         if (dadosDuvidas) {
-            // Criar o JSON para devolver para o APP
             duvidasJSON.membros = dadosDuvidas;
             duvidasJSON.quantidade = dadosDuvidas.length;
             duvidasJSON.status_code = 200;
             return duvidasJSON;
         } else {
             return message.ERROR_NOT_FOUND;
-        } 
+        }
     } catch (error) {
         console.log(error);
         return message.ERROR_INTERNAL_SERVER;
     }
-}
+};
 
-
-
-// Função para excluir um grupo de mentoria
+// Função para excluir dúvida compartilhada
 const setExcluirDuvidaCompartilhada = async function(id) {
     try {
         let idDuvidaCompartilhada = id;
@@ -58,69 +50,51 @@ const setExcluirDuvidaCompartilhada = async function(id) {
     }
 };
 
-
-
+// Função para listar dúvidas respondidas
 const getListarDuvidasRespondidas = async function() {
     try {
-        // Criar o objeto JSON
         let duvidasJSON = {};
-        
-        // Chamar a função do DAO para retornar os dados da tabela de produtos
-        
         let dadosDuvidas = await duvidaCompartilhadaDAO.selectDuvidasRespondidas();
 
-        // Validação para verificar se existem dados 
         if (dadosDuvidas) {
-            // Criar o JSON para devolver para o APP
             duvidasJSON.membros = dadosDuvidas;
             duvidasJSON.quantidade = dadosDuvidas.length;
             duvidasJSON.status_code = 200;
             return duvidasJSON;
         } else {
             return message.ERROR_NOT_FOUND;
-        } 
+        }
     } catch (error) {
         console.log(error);
         return message.ERROR_INTERNAL_SERVER;
     }
-}
+};
 
-
-
+// Função para listar dúvidas não respondidas
 const getListarDuvidasNaoRespondidas = async function() {
     try {
-        // Criar o objeto JSON
         let duvidasJSON = {};
-        
-        // Chamar a função do DAO para retornar os dados da tabela de produtos
-        
         let dadosDuvidas = await duvidaCompartilhadaDAO.selectDuvidasNaoRespondidas();
 
-        // Validação para verificar se existem dados 
         if (dadosDuvidas) {
-            // Criar o JSON para devolver para o APP
             duvidasJSON.membros = dadosDuvidas;
             duvidasJSON.quantidade = dadosDuvidas.length;
             duvidasJSON.status_code = 200;
             return duvidasJSON;
         } else {
             return message.ERROR_NOT_FOUND;
-        } 
+        }
     } catch (error) {
         console.log(error);
         return message.ERROR_INTERNAL_SERVER;
     }
-}
+};
 
-
+// Função para inserir nova dúvida
 const setInserirNovaDuvida = async function(dadosDuvida, contentType) {
     try {
         if (String(contentType).toLowerCase() === 'application/json') {
-            // Validação dos campos obrigatórios
-            if (!dadosDuvida.conteudo || dadosDuvida.conteudo.length > 500 ||
-                !dadosDuvida.data_envio || dadosDuvida.data_envio.length > 45 ||
-                !dadosDuvida.membro_id || typeof dadosDuvida.membro_id !== 'number' 
-               ) {
+            if (!dadosDuvida.conteudo || dadosDuvida.conteudo.length > 500 || !dadosDuvida.data_envio || dadosDuvida.data_envio.length > 45 || !dadosDuvida.membro_id || typeof dadosDuvida.membro_id !== 'number') {
                 return { error: "Campos obrigatórios inválidos." };
             } else {
                 let novaDuvida = await duvidaCompartilhadaDAO.inserirDuvidaCompartilhada(dadosDuvida);
@@ -143,20 +117,16 @@ const setInserirNovaDuvida = async function(dadosDuvida, contentType) {
     }
 };
 
-
 // Função para buscar dúvidas por ID de membro
 const getBuscarDuvidasPorMembro = async function(membroId) {
     try {
-        // Verifica se o ID do membro é válido
         if (!membroId || isNaN(membroId)) {
             return message.ERROR_INVALID_ID; // 400
         } else {
-            // Busca as dúvidas do membro pelo ID
             let dadosDuvidas = await duvidaCompartilhadaDAO.getDuvidasPorMembro(membroId);
 
             if (dadosDuvidas) {
                 if (dadosDuvidas.length > 0) {
-                    // Se houver dúvidas, retorna os dados
                     return {
                         duvidas: dadosDuvidas,
                         status_code: 200,
@@ -174,6 +144,33 @@ const getBuscarDuvidasPorMembro = async function(membroId) {
     }
 };
 
+// Função para buscar dúvidas por grupo de mentoria
+const getBuscarDuvidasPorGrupoMentoria = async function(grupoId) {
+    try {
+        if (!grupoId || isNaN(grupoId)) {
+            return message.ERROR_INVALID_ID; // 400
+        } else {
+            // Chama a função do DAO para buscar as dúvidas do grupo de mentoria
+            let dadosDuvidas = await duvidaCompartilhadaDAO.getDuvidasPorGrupoMentoria(grupoId);
+
+            if (dadosDuvidas) {
+                if (dadosDuvidas.length > 0) {
+                    return {
+                        duvidas: dadosDuvidas,
+                        status_code: 200,
+                    };
+                } else {
+                    return message.ERROR_NOT_FOUND; // 404, se não encontrar dúvidas
+                }
+            } else {
+                return message.ERROR_INTERNAL_SERVER_DB; // 500, erro na consulta
+            }
+        }
+    } catch (error) {
+        console.error(error);
+        return message.ERROR_INTERNAL_SERVER; // 500, erro interno
+    }
+};
 
 // Função para atualizar dúvida compartilhada
 const setAtualizarDuvida = async function(id, dadosDuvida, contentType) {
@@ -189,7 +186,6 @@ const setAtualizarDuvida = async function(id, dadosDuvida, contentType) {
                 if (dadosDuvida.conteudo === '' || dadosDuvida.conteudo === undefined || dadosDuvida.conteudo === null) {
                     return message.ERROR_REQUIRED_FIELDS;
                 } else {
-                    // Atualiza a dúvida diretamente
                     let updateResult = await  duvidaCompartilhadaDAO.updateDuvidaCompartilhada(idDuvida, dadosDuvida);
 
                     if (updateResult) {
@@ -214,9 +210,7 @@ const setAtualizarDuvida = async function(id, dadosDuvida, contentType) {
     }
 };
 
-
-
-
+// Exporta as funções da controller
 module.exports = {
     getListarAllDuvidas,
     getListarDuvidasRespondidas,
@@ -224,6 +218,6 @@ module.exports = {
     setInserirNovaDuvida,
     getBuscarDuvidasPorMembro,
     setAtualizarDuvida,
-    setExcluirDuvidaCompartilhada
+    setExcluirDuvidaCompartilhada,
+    getBuscarDuvidasPorGrupoMentoria // Função para listar dúvidas por grupo de mentoria
 };
-

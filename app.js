@@ -603,6 +603,8 @@ app.get('/v1/studyfy/duvidaCompartilhada', cors(), async function(request, respo
 });
 
 
+
+
 app.get('/v1/studyfy/duvidaCompartilhada/Respondida', cors(), async function(request, response) {
     try {
         // Chama a função da controller para retornar todos os grupos de mentoria
@@ -706,6 +708,30 @@ app.delete('/v1/studyfy/duvidaCompartilhada/:id', cors(), async function(request
         response.status(500).json({ status_code: 500, message: 'Erro interno do servidor' });
     }
 });
+
+
+// Endpoint: Buscar as dúvidas compartilhadas de um grupo de mentoria pelo ID
+app.get('/v1/studyfy/duvidaCompartilhada/grupo/:grupoId', cors(), async function(request, response) {
+    try {
+        // Pega o ID do grupo de mentoria da URL
+        const grupoId = parseInt(request.params.grupoId);
+
+        // Chama a função da controller para buscar as dúvidas do grupo de mentoria
+        const resultadoDuvidas = await controllerDuvidaCompartilhada.getBuscarDuvidasPorGrupoMentoria(grupoId);
+
+        // Verifica se encontrou as dúvidas
+        if (resultadoDuvidas.status_code === 404) {
+            return response.status(404).json({ message: 'Nenhuma dúvida encontrada para este grupo de mentoria.' });
+        }
+
+        // Retorna as dúvidas encontradas
+        response.status(resultadoDuvidas.status_code).json(resultadoDuvidas);
+    } catch (error) {
+        console.error('Erro ao buscar dúvidas do grupo de mentoria:', error);
+        response.status(500).json({ status_code: 500, message: 'Erro interno do servidor' });
+    }
+});
+
 
 
 

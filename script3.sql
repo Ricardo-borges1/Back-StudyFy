@@ -1,5 +1,4 @@
 -- Criação do banco de dados
-drop database studyfy;
 create DATABASE StudyFy;
 
 USE StudyFy;
@@ -112,6 +111,8 @@ CREATE TABLE tbl_ordem_palavra (
     conteudo VARCHAR(245) NOT NULL,
     FOREIGN KEY (questao_id) REFERENCES tbl_questao(id)
 );
+
+drop table tbl_ordem_palavra;
 
 -- Tabela tbl_materias
 CREATE TABLE tbl_materias (
@@ -358,9 +359,7 @@ INSERT INTO tbl_questao (enunciado, tipo_questao_id, imagem, atividade_grupo_men
 ('O céu é azul?', 2, NULL, 1),
 ('Organize as Guerras de forma crescente na sequência correta', 4, NULL, 1),
 ('Coloque a capital correspondente ao País', 5, NULL, 1),
-('4 x 3 é igual a 13? ', 2, NULL, 1),
-('Coloque os resultados correspondentes das equações', 5, NULL, 1);
-
+('4 x 3 é igual a 13? ', 2, NULL, 1);
 
 -- Inserir dados na tabela tbl_resposta_lacunas
 INSERT INTO tbl_resposta_lacunas (posicao_inicial, posicao_fim, questao_id, palavra) VALUES
@@ -377,10 +376,7 @@ INSERT INTO tbl_resposta_correspondencia (palavra_correspondente, resposta_corre
 ('Japão', 'Tóquio', 5),
 ('Egito', 'Cairo', 5),
 ('Equador', 'Quito', 5),
-('8', '5 + 3', 6),
-('7', '20 - 13', 6),
-('72', '12 x 6', 6),
-('27', '54 dividido por 2', 6);
+('Austrália', 'Camberra', 5);
 
 -- Inserir dados na tabela tbl_resposta_multipla_escolha
 INSERT INTO tbl_resposta_multipla_escolha (conteudo, autenticacao, questao_id) VALUES
@@ -594,26 +590,22 @@ drop view vw_emblemas_nao_conquistados;
     
       ---------------------------------------------------------------------------------------------------------------------
     
+   CREATE VIEW vw_alunos_ranking_sala AS
 SELECT 
-    vw_alunos_ranking_sala.*, 
-    tbl_salas.*, 
-    tbl_imagens_usuario.caminho_imagem,
-    tbl_imagens_usuario.nome_imagem
+    tbl_alunos.id AS id_aluno,
+    tbl_alunos.nome AS nome_aluno,
+    tbl_alunos_ranks.pontos_rank AS pontos_aluno,
+    ROW_NUMBER() OVER (ORDER BY tbl_alunos_ranks.pontos_rank DESC) AS posicao
 FROM 
-    vw_alunos_ranking_sala
+    tbl_alunos 
 JOIN 
-    tbl_salas_alunos ON vw_alunos_ranking_sala.id_aluno = tbl_salas_alunos.aluno_id
+    tbl_salas_alunos ON tbl_alunos.id = tbl_salas_alunos.aluno_id
 JOIN 
     tbl_salas ON tbl_salas_alunos.sala_id = tbl_salas.id
-JOIN 
-    tbl_alunos ON vw_alunos_ranking_sala.id_aluno = tbl_alunos.id
-JOIN 
-    tbl_imagens_usuario ON tbl_alunos.imagem_id = tbl_imagens_usuario.id  -- Alterado para tbl_imagens_usuario
-WHERE 
-    tbl_salas_alunos.sala_id = (SELECT sala_id FROM tbl_salas_alunos WHERE aluno_id = 1)
+LEFT JOIN 
+    tbl_alunos_ranks ON tbl_alunos.id = tbl_alunos_ranks.aluno_id
 ORDER BY 
-    vw_alunos_ranking_sala.pontos_aluno DESC;
-
+    tbl_alunos_ranks.pontos_rank DESC;  -- Ordena os resultados por pontos de forma decrescente
 
 
 
@@ -933,3 +925,27 @@ WHERE aluno_id = 1;  -- Substitua 2 pelo ID do aluno desejado
 SELECT * 
 FROM vw_mentores_alunos 
 WHERE mentor_id = 1;  -- Substitua 3 pelo ID do mentor desejado
+
+
+     ---------------------------------------------------------------------------------------------------------------------
+
+CREATE VIEW vw_duvidas_grupo_mentoria AS
+SELECT 
+    duvida.id AS id_duvida,
+    duvida.conteudo AS conteudo_duvida,
+    duvida.data_envio,
+    duvida.respondida,
+    membro.aluno_id,
+    grupo.id AS id_grupo_mentoria  -- Alterado para retornar o ID do grupo de mentoria
+FROM 
+    tbl_duvida_compartilhada AS duvida
+JOIN 
+    tbl_membros AS membro ON duvida.membro_id = membro.id
+JOIN 
+    tbl_grupo_mentoria AS grupo ON membro.grupo_mentoria_id = grupo.id;
+    
+    
+    SELECT * 
+FROM vw_duvidas_grupo_mentoria
+WHERE id_grupo_mentoria = 1;  -- Substitua pelo ID do grupo de mentoria desejado
+
