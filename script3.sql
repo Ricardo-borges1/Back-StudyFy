@@ -496,10 +496,41 @@ INSERT INTO tbl_temporadas (data_inicio, data_fim)
     );
 
 
-
-
-
 -- VIEWS, E OS SELECTS -- 
+CREATE OR REPLACE VIEW vw_duvidas_por_grupo AS 
+SELECT 
+    dc.id AS id_duvida,
+    dc.conteudo AS conteudo_duvida,
+    dc.data_envio,
+    dc.respondida,
+    gm.id AS id_grupo_mentoria, -- substituindo por gm.id
+    a.nome AS nome_aluno
+FROM 
+    tbl_duvida_compartilhada AS dc
+JOIN 
+    tbl_membros AS m ON dc.membro_id = m.id
+JOIN 
+    tbl_grupo_mentoria AS gm ON m.grupo_mentoria_id = gm.id
+JOIN 
+    tbl_alunos AS a ON m.aluno_id = a.id
+ORDER BY 
+    dc.data_envio DESC;
+
+
+
+SELECT 
+    id_duvida,
+    conteudo_duvida,
+    data_envio,
+    respondida,
+    id_grupo_mentoria
+FROM 
+    vw_duvidas_por_grupo
+WHERE 
+    id_grupo_mentoria = 1;  -- Substitua '1' pelo ID do grupo desejado
+
+
+    ---------------------------------------------------------------------------------------------------------------------
     
     CREATE VIEW vw_alunos_sala AS
 SELECT 
@@ -517,7 +548,18 @@ JOIN
 
 SELECT * FROM vw_alunos_sala_1 where id_sala = 1;
     
-    
+CREATE VIEW vw_duvidas_por_grupo AS
+SELECT 
+    id_duvida,
+    conteudo_duvida,
+    data_envio,
+    respondida,
+    id_grupo_mentoria
+FROM 
+    vw_duvidas_grupo_mentoria
+ORDER BY 
+    data_envio DESC;
+
     ---------------------------------------------------------------------------------------------------------------------
 
     CREATE VIEW vw_emblemas_aluno AS
@@ -633,7 +675,6 @@ FROM vw_informacoes_alunos_ranking
 WHERE id_aluno = 2; 
     
         ---------------------------------------------------------------------------------------------------------------------
-    
     
   CREATE VIEW vw_alunos_mentores AS
 SELECT 
